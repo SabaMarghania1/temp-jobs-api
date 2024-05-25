@@ -1,0 +1,169 @@
+openapi: 3.0.0
+info:
+  title: jobs-api
+  version: '1.0'
+servers:
+  - url: https://temp-jobs-api-2sja.onrender.com/api/v1
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register User
+      operationId: RegisterUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserRequest'
+        required: true
+      responses:
+        '200':
+          description: User registered successfully
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login User
+      operationId: LoginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+        required: true
+      responses:
+        '200':
+          description: User logged in successfully
+  /jobs:
+    post:
+      tags:
+        - Jobs
+      summary: Create Job
+      operationId: CreateJob
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateJobRequest'
+        required: true
+      responses:
+        '200':
+          description: Job created successfully
+    get:
+      tags:
+        - Jobs
+      summary: Get All Jobs
+      operationId: GetAllJobs
+      responses:
+        '200':
+          description: List of all jobs
+      security:
+        - bearerAuth: []
+  /jobs/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The job ID
+    get:
+      tags:
+        - Jobs
+      summary: Get Job
+      operationId: GetJob
+      responses:
+        '200':
+          description: Job details retrieved successfully
+    delete:
+      tags:
+        - Jobs
+      summary: Delete Job
+      operationId: DeleteJob
+      responses:
+        '200':
+          description: Job deleted successfully
+    patch:
+      tags:
+        - Jobs
+      summary: Update Job
+      operationId: UpdateJob
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateJobRequest'
+        required: true
+      responses:
+        '200':
+          description: Job updated successfully
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    RegisterUserRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        name: saba
+        email: saba@gmail.com
+        password: sabasaba
+    LoginUserRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: saba@gmail.com
+        password: sabasaba
+    CreateJobRequest:
+      type: object
+      required:
+        - company
+        - position
+      properties:
+        company:
+          type: string
+        position:
+          type: string
+      example:
+        company: Microsoft
+        position: Software-Engineer
+    UpdateJobRequest:
+      type: object
+      required:
+        - company
+        - position
+      properties:
+        company:
+          type: string
+        position:
+          type: string
+      example:
+        company: random
+        position: random
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  - name: Auth
+    description: Authentication endpoints
+  - name: Jobs
+    description: Job management endpoints
